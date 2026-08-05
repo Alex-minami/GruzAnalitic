@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Транспорт и Логистика РФ 2022–2026: Аналитический Хаб</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+        }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 400px;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+        }
+
+        .nav-link.active {
+            border-bottom: 2px solid #3b82f6;
+            color: #3b82f6;
+        }
+
+        .gradient-text {
+            background: linear-gradient(90deg, #1e40af, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .timeline-item::before {
+            content: "";
+            position: absolute;
+            left: -9px;
+            top: 0;
+            width: 18px;
+            height: 18px;
+            background: #3b82f6;
+            border-radius: 50%;
+            border: 4px solid #fff;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4">
+        <div class="flex justify-between items-center h-16">
+            <div class="flex items-center space-x-2">
+                <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold">L</div>
+                <span class="font-bold text-xl tracking-tight text-slate-800 uppercase">Logistics Insight</span>
+            </div>
+            <div class="hidden md:flex space-x-8">
+                <button onclick="scrollToSection('overview')" class="nav-link text-sm font-medium text-slate-600 hover:text-blue-600">Обзор</button>
+                <button onclick="scrollToSection('transport')" class="nav-link text-sm font-medium text-slate-600 hover:text-blue-600">Транспорт</button>
+                <button onclick="scrollToSection('economics')" class="nav-link text-sm font-medium text-slate-600 hover:text-blue-600">Экономика</button>
+                <button onclick="scrollToSection('digital')" class="nav-link text-sm font-medium text-slate-600 hover:text-blue-600">Цифровизация</button>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<main class="max-w-7xl mx-auto px-4 py-8">
+    <header class="mb-12 text-center">
+        <h1 class="text-4xl md:text-5xl font-extrabold text-slate-900 mb-4">
+            Транспортно-логистический рынок <span class="gradient-text">России 2022–2026</span>
+        </h1>
+        <p class="text-lg text-slate-600 max-w-3xl mx-auto leading-relaxed">
+            Фундаментальная структурная перестройка отрасли: переход от глобальных цепочек к локальной дистрибуции, каскадный рост тарифов и неизбежная цифровизация.
+        </p>
+    </header>
+
+    <section id="overview" class="mb-20">
+        <div class="bg-blue-50 border-l-4 border-blue-600 p-6 mb-10 rounded-r-xl">
+            <h2 class="text-2xl font-bold text-slate-800 mb-2">Общий взгляд: Феномен номинального роста</h2>
+            <p class="text-slate-700">
+                Рынок демонстрирует рекордные цифры в рублях, однако этот рост во многом иллюзорен. Здесь мы анализируем разрыв между финансовыми показателями и реальным объемом работы. Это помогает понять, почему при растущей выручке компании могут сталкиваться с кризисом наличности.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+            <div class="glass-card p-6 rounded-2xl">
+                <span class="text-slate-500 text-sm font-semibold uppercase tracking-wider">Оборот отрасли (2025)</span>
+                <div class="text-3xl font-bold text-slate-900 mt-2">25.78 трлн ₽</div>
+                <div class="text-green-600 text-sm font-medium mt-1">↑ 180% к 2022 году</div>
+            </div>
+            <div class="glass-card p-6 rounded-2xl">
+                <span class="text-slate-500 text-sm font-semibold uppercase tracking-wider">Рост тарифов (3 года)</span>
+                <div class="text-3xl font-bold text-slate-900 mt-2">+69%</div>
+                <div class="text-red-600 text-sm font-medium mt-1">Исторический максимум</div>
+            </div>
+            <div class="glass-card p-6 rounded-2xl">
+                <span class="text-slate-500 text-sm font-semibold uppercase tracking-wider">Грузооборот (2025)</span>
+                <div class="text-3xl font-bold text-slate-900 mt-2">5.54 трлн т-км</div>
+                <div class="text-slate-500 text-sm font-medium mt-1">↓ 0.8% (Стагнация)</div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+            <div class="glass-card p-6 rounded-2xl">
+                <h3 class="text-lg font-bold mb-4 text-center">Динамика стоимостного объема рынка (ТЛУ)</h3>
+                <div class="chart-container">
+                    <canvas id="marketChart"></canvas>
+                </div>
+            </div>
+            <div class="space-y-4">
+                <h4 class="text-xl font-bold text-slate-800">Ключевой вывод</h4>
+                <p class="text-slate-600">
+                    Наблюдается "эффект второго порядка": сокращение плеча перевозки при росте тоннажа. Логистика переориентировалась с транс-евразийских магистралей на короткие маршруты внутри страны и приграничные хабы.
+                </p>
+                <ul class="space-y-3">
+                    <li class="flex items-start">
+                        <span class="bg-blue-100 text-blue-600 rounded-full p-1 mr-3 mt-1 text-xs">✔</span>
+                        <span>Рост тоннажа без трубопроводов: <strong>+8.7%</strong></span>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="bg-blue-100 text-blue-600 rounded-full p-1 mr-3 mt-1 text-xs">✔</span>
+                        <span>Реальный физический прирост (2024): <strong>5.6-6.9%</strong></span>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="bg-blue-100 text-blue-600 rounded-full p-1 mr-3 mt-1 text-xs">✔</span>
+                        <span>Темп роста тарифов: <strong>21% в год</strong> (против нормы 5.7%)</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section id="transport" class="mb-20">
+        <div class="bg-amber-50 border-l-4 border-amber-600 p-6 mb-10 rounded-r-xl">
+            <h2 class="text-2xl font-bold text-slate-800 mb-2">Структура перевозки по видам транспорта</h2>
+            <p class="text-slate-700">
+                Каждый вид транспорта столкнулся со своими вызовами: авиация — с санкциями, железная дорога — с дефицитом мощностей на Востоке, а автотранспорт стал «последней надеждой», приняв на себя основные объемы грузов.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+            <div class="glass-card p-6 rounded-2xl">
+                <h3 class="text-lg font-bold mb-6 text-center">Распределение тоннажа (2025, млрд тонн)</h3>
+                <div class="chart-container">
+                    <canvas id="transportTypeChart"></canvas>
+                </div>
+            </div>
+            <div class="bg-white p-6 border border-slate-200 rounded-2xl">
+                <h3 class="text-xl font-bold mb-4">Детализация сегментов</h3>
+                <div class="space-y-6">
+                    <div>
+                        <div class="flex justify-between mb-1">
+                            <span class="font-semibold">Автомобильный (Лидер)</span>
+                            <span class="text-blue-600 font-bold">~80% веса</span>
+                        </div>
+                        <p class="text-sm text-slate-500">Доля в коммерческом грузообороте выросла с 29% до 37%.</p>
+                    </div>
+                    <div>
+                        <div class="flex justify-between mb-1">
+                            <span class="font-semibold">Железнодорожный</span>
+                            <span class="text-amber-600 font-bold">↓ 4.6-5.7%</span>
+                        </div>
+                        <p class="text-sm text-slate-500">Узкое место — Восточный полигон (БАМ и Транссиб).</p>
+                    </div>
+                    <div>
+                        <div class="flex justify-between mb-1">
+                            <span class="font-semibold">Авиационный</span>
+                            <span class="text-red-600 font-bold">Падение в 3 раза</span>
+                        </div>
+                        <p class="text-sm text-slate-500">Потери из-за санкций и лизинговых ограничений.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="economics" class="mb-20">
+        <div class="bg-red-50 border-l-4 border-red-600 p-6 mb-10 rounded-r-xl">
+            <h2 class="text-2xl font-bold text-slate-800 mb-2">Микроэкономика: Кризис неплатежеспособности 2025</h2>
+            <p class="text-slate-700">
+                Это самый критический раздел отчета. Мы визуализируем «ножницы»: взрывной рост затрат при падении спотовых ставок. Это объясняет, почему в 2025 году рынок столкнулся с волной банкротств (7000 компаний).
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div class="glass-card p-6 rounded-2xl">
+                <h3 class="text-lg font-bold mb-4 text-center">Рост себестоимости FTL-перевозок (₽/км)</h3>
+                <div class="chart-container">
+                    <canvas id="costChart"></canvas>
+                </div>
+            </div>
+            <div class="glass-card p-6 rounded-2xl overflow-x-auto">
+                <h3 class="text-lg font-bold mb-4">Основные факторы удорожания</h3>
+                <table class="min-w-full text-sm">
+                    <thead>
+                        <tr class="bg-slate-50 text-slate-600 uppercase text-xs font-bold">
+                            <th class="px-4 py-3 text-left">Фактор</th>
+                            <th class="px-4 py-3 text-right">Динамика</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100">
+                        <tr>
+                            <td class="px-4 py-3">Лизинговый платеж (тягач)</td>
+                            <td class="px-4 py-3 text-right text-red-600 font-bold">+94.7%</td>
+                        </tr>
+                        <tr>
+                            <td class="px-4 py-3">Запчасти и ТО</td>
+                            <td class="px-4 py-3 text-right text-red-600 font-bold">+70–85%</td>
+                        </tr>
+                        <tr>
+                            <td class="px-4 py-3">Зарплата водителей</td>
+                            <td class="px-4 py-3 text-right text-red-600 font-bold">+30–40%</td>
+                        </tr>
+                        <tr>
+                            <td class="px-4 py-3">Дефицит кадров (кат. Е)</td>
+                            <td class="px-4 py-3 text-right text-amber-600 font-bold">30% простоя</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="mt-6 p-4 bg-red-600 text-white rounded-xl text-center">
+                    <p class="text-xs uppercase font-bold tracking-widest opacity-80">Результат</p>
+                    <p class="text-lg font-bold">7 000 банкротств компаний в 2025-26 гг.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="digital" class="mb-20">
+        <div class="bg-slate-800 text-white p-10 rounded-3xl relative overflow-hidden">
+            <h2 class="text-3xl font-bold mb-6">Цифровая трансформация и Регуляторика</h2>
+            <p class="text-slate-300 mb-10 max-w-2xl">
+                Рынок уходит от «серой» зоны. Главным условием выживания к концу 2026 года станет полная интеграция с государственными системами контроля.
+            </p>
+
+            <div class="relative ml-4 border-l-2 border-blue-500/30 pl-8 space-y-10">
+                <div class="timeline-item relative">
+                    <span class="text-blue-400 font-bold">Сентябрь 2022</span>
+                    <h4 class="text-xl font-bold">Запуск ГИС ЭПД</h4>
+                    <p class="text-slate-400 text-sm">Внедрение электронных накладных в добровольном режиме.</p>
+                </div>
+                <div class="timeline-item relative">
+                    <span class="text-blue-400 font-bold">Сентябрь 2025</span>
+                    <h4 class="text-xl font-bold">Единый документ (Мультимодальность)</h4>
+                    <p class="text-slate-400 text-sm">Сквозной документ для маршрутов авто + ж/д + море.</p>
+                </div>
+                <div class="timeline-item relative">
+                    <span class="text-blue-400 font-bold">Март 2026</span>
+                    <h4 class="text-xl font-bold">Платформа «ГосЛог»</h4>
+                    <p class="text-slate-400 text-sm">Старт госсистемы цифрового мониторинга логистических потоков.</p>
+                </div>
+                <div class="timeline-item relative border-blue-500">
+                    <span class="text-amber-400 font-bold">1 Сентября 2026</span>
+                    <h4 class="text-xl font-bold">Обязательный переход на ЭПД</h4>
+                    <p class="text-slate-300 text-sm font-semibold">Финальный дедлайн: весь коммерческий транспорт переходит на цифру.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="border-t border-slate-200 pt-10 text-slate-500 text-sm pb-10">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div>
+                <h5 class="font-bold text-slate-800 mb-2">О данном исследовании</h5>
+                <p>Представленные данные основаны на комплексном анализе рынка РФ за 2022–2026 годы. Номинальные показатели рассчитаны на основе текущих цен, реальные показатели скорректированы с учетом инфляционных ожиданий и тарифной политики.</p>
+            </div>
+            <div class="md:text-right">
+                <h5 class="font-bold text-slate-800 mb-2">Рекомендация стратегам</h5>
+                <p>Ключевым фактором устойчивости является контроль маржинальности рейса и внедрение TMS-систем. Рынок консолидируется вокруг крупных цифровых экспедиторов.</p>
+            </div>
+        </div>
+        <div class="mt-8 text-center border-t border-slate-100 pt-4">
+            © 2026 Аналитический центр транспортной логистики
+        </div>
+    </footer>
+</main>
+
+<script>
+    function scrollToSection(id) {
+        document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+    }
+
+    Chart.defaults.font.family = "'Inter', sans-serif";
+    Chart.defaults.color = '#64748b';
+
+    const marketCtx = document.getElementById('marketChart').getContext('2d');
+    new Chart(marketCtx, {
+        type: 'bar',
+        data: {
+            labels: ['2022', '2023', '2024', '2025 (Прогноз)'],
+            datasets: [{
+                label: 'Объем ТЛУ (трлн руб.)',
+                data: [4.66, 10.5, 11.70, 13.13],
+                backgroundColor: '#3b82f6',
+                borderRadius: 8,
+            }, {
+                label: 'Широкий оборот (трлн руб.)',
+                data: [9.10, 11.10, 24.30, 25.78],
+                backgroundColor: '#94a3b8',
+                borderRadius: 8,
+            }]
+        },
+        options: {
+            maintainAspectRatio: false,
+            plugins: { legend: { position: 'bottom' } },
+            scales: {
+                y: { beginAtZero: true, grid: { display: false } },
+                x: { grid: { display: false } }
+            }
+        }
+    });
+
+    const transportCtx = document.getElementById('transportTypeChart').getContext('2d');
+    new Chart(transportCtx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Автомобильный', 'Железнодорожный', 'Трубопроводный', 'Водный', 'Морской', 'Авиа'],
+            datasets: [{
+                data: [6.87, 1.25, 1.06, 0.09, 0.035, 0.0004],
+                backgroundColor: ['#3b82f6', '#f59e0b', '#64748b', '#10b981', '#6366f1', '#ef4444'],
+                borderWidth: 0
+            }]
+        },
+        options: {
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { position: 'right' },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return context.label + ': ' + context.raw + ' млрд тонн';
+                        }
+                    }
+                }
+            },
+            cutout: '70%'
+        }
+    });
+
+    const costCtx = document.getElementById('costChart').getContext('2d');
+    new Chart(costCtx, {
+        type: 'line',
+        data: {
+            labels: ['2022', '2023', '2024', '2025'],
+            datasets: [{
+                label: 'Себестоимость FTL (руб/км)',
+                data: [51.6, 72.0, 96.0, 105.0],
+                borderColor: '#ef4444',
+                backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                fill: true,
+                tension: 0.4,
+                pointRadius: 6,
+                pointBackgroundColor: '#ef4444'
+            }, {
+                label: 'Спот-ставка (руб/км)',
+                data: [60.0, 78.0, 82.0, 65.0],
+                borderColor: '#10b981',
+                borderDash: [5, 5],
+                tension: 0.4,
+                pointRadius: 6
+            }]
+        },
+        options: {
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { position: 'bottom' },
+                tooltip: { intersect: false, mode: 'index' }
+            },
+            scales: {
+                y: {
+                    title: { display: true, text: 'Рублей за км' },
+                    grid: { color: '#f1f5f9' }
+                },
+                x: { grid: { display: false } }
+            }
+        }
+    });
+</script>
+</body>
+</html>
