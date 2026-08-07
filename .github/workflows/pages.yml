@@ -25,13 +25,24 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Build static research site
+        run: |
+          python -m pip install --quiet markdown beautifulsoup4
+          rm -rf _site
+          mkdir _site
+          rsync -a --exclude '.git' --exclude '_site' ./ _site/
+          python scripts/build_research.py _site/logistics-research.html
+          test -s _site/logistics-research.html
+          ! grep -q 'DecompressionStream' _site/logistics-research.html
+          ! grep -q 'research/data-01.js' _site/logistics-research.html
+
       - name: Configure Pages
         uses: actions/configure-pages@v5
 
       - name: Upload site
         uses: actions/upload-pages-artifact@v3
         with:
-          path: .
+          path: _site
 
       - name: Deploy
         id: deployment
