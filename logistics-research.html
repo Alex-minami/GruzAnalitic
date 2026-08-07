@@ -3,56 +3,89 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="description" content="Глубокое исследование рынка логистики и автомобильных грузоперевозок РФ 2022–2026: Middle Mile, Last Mile, LCV/MCV, ставки, себестоимость, маржинальность и прогнозы.">
-  <meta name="theme-color" content="#08111f">
-  <title>Логистика РФ 2022–2026 — глубокое исследование</title>
+  <meta name="description" content="Полное исследование рынка логистики и автомобильных грузоперевозок РФ 2022–2026: Middle Mile, Last Mile, LCV/MCV, ставки, себестоимость, маржинальность и прогнозы.">
+  <meta name="theme-color" content="#0b1426">
+  <title>Рынок логистики РФ 2022–2026 — глубокое исследование</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="research/styles.css?v=20260807-2">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="research/styles-v2.css?v=20260807-1227">
   <script src="https://cdn.jsdelivr.net/npm/marked@15.0.7/marked.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
 </head>
 <body>
   <div class="reading-progress" id="reading-progress"></div>
   <header class="site-header">
     <div class="header-inner">
-      <a class="brand" href="#top" aria-label="К началу исследования"><span class="brand-mark">LI</span><span class="brand-text"><b>Logistics Intelligence</b><small>Russia · 2022–2026</small></span></a>
-      <div class="header-actions"><button id="search-open" class="header-button" type="button">Поиск</button><button id="toc-open" class="header-button mobile-only" type="button">Главы</button></div>
+      <a class="brand" href="#top" aria-label="К началу исследования">
+        <span class="brand-mark">LI</span>
+        <span class="brand-copy"><b>Logistics Intelligence</b><small>Russia · 2022–2026</small></span>
+      </a>
+      <div class="header-actions">
+        <button id="search-open" class="header-button" type="button">Поиск</button>
+        <button id="toc-open" class="header-button mobile-only" type="button">Главы</button>
+      </div>
     </div>
   </header>
+
   <main id="top">
-    <section class="hero"><div class="hero-noise" aria-hidden="true"></div><div class="hero-inner">
-      <div class="hero-kicker">Сводное исследование · срез на 7 августа 2026</div>
-      <h1>Рынок логистики РФ<br><span>2022–2026</span></h1>
-      <p class="hero-lead">Большое исследование автомобильных грузоперевозок, Middle Mile и Last Mile: деньги, физические объёмы, ставки, себестоимость, парк, кадры, e-commerce, юнит-экономика и сценарии до 2028 года.</p>
-      <div class="hero-metrics"><div class="metric"><span>Автоперевозки 2025</span><strong>2,63 трлн ₽</strong><small>коммерческий контур</small></div><div class="metric"><span>Ставки ATI.SU</span><strong>+28,8%</strong><small>г/г к 13.07.2026</small></div><div class="metric"><span>Газель, себестоимость</span><strong>61,5 ₽/км</strong><small>7 500 км/мес, полная модель</small></div><div class="metric"><span>Last Mile</span><strong>30–53%</strong><small>логистических затрат e-commerce</small></div></div>
-      <div class="hero-actions"><a href="#1-executive-summary-18-тезисов" class="primary-cta">Читать исследование</a><a href="#27-двадцать-выводов-однои-страницеи" class="secondary-cta">20 выводов</a></div>
-    </div></section>
-    <section class="audio-feature" aria-label="Аудиоверсия исследования"><div class="audio-icon" aria-hidden="true">▶</div><div class="audio-copy"><div class="eyebrow">Аудио · 5:11</div><h2>Почему логистика банкротится при рекордной выручке</h2><p>Короткая аудиоверсия ключевой логики исследования.</p></div><audio id="research-audio" controls preload="metadata">Ваш браузер не поддерживает аудио.</audio></section>
-    <section class="method-banner"><div><span class="confidence high">High</span><b>Первичные данные</b><small>Росстат, Минтранс, ЦБ, ФНС, Автостат</small></div><div><span class="confidence medium">Medium</span><b>Отраслевые оценки</b><small>ATI.SU, Data Insight, АКИТ, Kept и др.</small></div><div><span class="confidence low">Model</span><b>Расчётные модели</b><small>Юнит-экономика, ставки, Middle / Last Mile</small></div></section>
-    <div class="page-layout"><aside class="toc" id="toc"><div class="toc-head"><b>Оглавление</b><button id="toc-close" class="mobile-only" type="button">Закрыть</button></div><nav id="toc-nav"><span class="toc-loading">Загрузка…</span></nav></aside><article class="research" id="research"><div class="loading-state"><strong>Загружаю исследование…</strong><span>27 разделов · более 90 таблиц · модели и прогнозы</span></div></article></div>
+    <section class="hero">
+      <div class="hero-inner">
+        <div class="hero-kicker">Сводное исследование · срез на 7 августа 2026</div>
+        <h1>Рынок логистики РФ<br><span>2022–2026</span></h1>
+        <p class="hero-lead">Полное исследование автомобильных грузоперевозок, Middle Mile и Last Mile: денежный и физический объём рынка, ставки, себестоимость, юнит-экономика LCV/MCV, парк, кадры, e-commerce, регулирование и сценарии до 2028 года.</p>
+        <div class="hero-metrics">
+          <div class="metric"><span>Коммерческие автоперевозки 2025</span><strong>2,63 трлн ₽</strong><small>рынок услуг</small></div>
+          <div class="metric"><span>Индекс ставок ATI.SU</span><strong>+28,8%</strong><small>г/г к 13.07.2026</small></div>
+          <div class="metric"><span>Газель · полная себестоимость</span><strong>61,5 ₽/км</strong><small>7 500 км/мес, модель</small></div>
+          <div class="metric"><span>Last Mile</span><strong>30–53%</strong><small>логистических затрат e-commerce</small></div>
+        </div>
+        <nav class="hero-links" aria-label="Ключевые разделы">
+          <a href="#1-executive-summary-18-тезисов">18 тезисов</a>
+          <a href="#8-ставки-и-тарифы-полная-карта">Ставки</a>
+          <a href="#9-себестоимость-километра-три-модели-рядом">Себестоимость</a>
+          <a href="#11-middle-mile-глубокий-анализ">Middle Mile</a>
+          <a href="#12-last-mile-центральный-раздел">Last Mile</a>
+          <a href="#21-прогнозы-2026-2028">Прогноз</a>
+        </nav>
+      </div>
+    </section>
+
+    <section class="method-strip" aria-label="Качество данных">
+      <div class="method-inner">
+        <div class="method-item"><span class="confidence high">High</span><div><b>Первичные данные</b><small>Росстат, Минтранс, ЦБ, ФНС, Автостат и отчётность.</small></div></div>
+        <div class="method-item"><span class="confidence medium">Medium</span><div><b>Отраслевые оценки</b><small>ATI.SU, Data Insight, АКИТ, Kept и другие источники.</small></div></div>
+        <div class="method-item"><span class="confidence model">Model</span><div><b>Расчётные модели</b><small>Ставки, юнит-экономика и оценки Middle / Last Mile.</small></div></div>
+      </div>
+    </section>
+
+    <div class="page-layout">
+      <aside class="toc" id="toc">
+        <div class="toc-head"><b>Оглавление</b><button id="toc-close" class="header-button mobile-only" type="button">Закрыть</button></div>
+        <nav id="toc-nav"><span>Загрузка…</span></nav>
+      </aside>
+      <article class="research" id="research">
+        <div class="loading-state"><strong>Загружаю полное исследование…</strong><span>Все 27 разделов, таблицы, формулы, тезисы и визуализации.</span></div>
+      </article>
+    </div>
   </main>
-  <dialog class="search-dialog" id="search-dialog"><div class="search-shell"><div class="search-top"><b>Поиск по исследованию</b><button id="search-close" type="button">×</button></div><input id="search-input" type="search" placeholder="Например: холостой пробег, Газель, Middle Mile…" autocomplete="off"><div id="search-results" class="search-results"></div></div></dialog>
+
+  <div class="toc-overlay" id="toc-overlay"></div>
+  <dialog class="search-dialog" id="search-dialog">
+    <div class="search-shell">
+      <div class="search-top"><b>Поиск по исследованию</b><button id="search-close" type="button" aria-label="Закрыть">×</button></div>
+      <input id="search-input" type="search" placeholder="Например: холостой пробег, Газель, Last Mile…" autocomplete="off">
+      <div id="search-results" class="search-results"><div class="search-result"><small>Введите минимум два символа.</small></div></div>
+    </div>
+  </dialog>
   <button class="back-top" id="back-top" type="button" aria-label="Наверх">↑</button>
-  <script src="research/data-01.js?v=20260807-4"></script>
-  <script src="research/data-02.js?v=20260807-4"></script>
-  <script src="research/data-03.js?v=20260807-4"></script>
-  <script src="research/data-04.js?v=20260807-4"></script>
-  <script src="research/data-05.js?v=20260807-4"></script>
-  <script src="research/data-06.js?v=20260807-4"></script>
-  <script src="research/data-07.js?v=20260807-4"></script>
-  <script src="research/audio-01.js?v=20260807-4"></script>
-  <script src="research/audio-02.js?v=20260807-4"></script>
-  <script src="research/audio-03.js?v=20260807-4"></script>
-  <script src="research/audio-04.js?v=20260807-4"></script>
-  <script src="research/audio-05.js?v=20260807-4"></script>
-  <script src="research/audio-06.js?v=20260807-4"></script>
-  <script src="research/audio-07.js?v=20260807-4"></script>
-  <script src="research/audio-08.js?v=20260807-4"></script>
-  <script src="research/audio-09.js?v=20260807-4"></script>
-  <script src="research/audio-10.js?v=20260807-4"></script>
-  <script src="research/audio-11.js?v=20260807-4"></script>
-  <script src="research/app.js?v=20260807-4"></script>
+
+  <script src="research/data-01.js?v=20260807-1227"></script>
+  <script src="research/data-02.js?v=20260807-1227"></script>
+  <script src="research/data-03.js?v=20260807-1227"></script>
+  <script src="research/data-04.js?v=20260807-1227"></script>
+  <script src="research/data-05.js?v=20260807-1227"></script>
+  <script src="research/data-06.js?v=20260807-1227"></script>
+  <script src="research/data-07.js?v=20260807-1227"></script>
+  <script src="research/app-v2.js?v=20260807-1227"></script>
 </body>
 </html>
