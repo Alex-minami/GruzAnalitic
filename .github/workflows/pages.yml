@@ -31,10 +31,25 @@ jobs:
           rm -rf _site
           mkdir _site
           rsync -a --exclude '.git' --exclude '_site' ./ _site/
-          python scripts/build_research.py _site/logistics-research.html
+
+          # Replace legacy/corrupted browser data chunks with the canonical
+          # research source before running the build-time renderer.
+          rm -f _site/research/data-[0-9][0-9].js
+          printf "window.RESEARCH_DATA_PARTS=window.RESEARCH_DATA_PARTS||[];window.RESEARCH_DATA_PARTS.push('" > _site/research/data-01.js
+          cat research/source-b64-*.txt >> _site/research/data-01.js
+          printf "');\n" >> _site/research/data-01.js
+
+          # Run inside _site so the generator reads only the canonical copy.
+          python _site/scripts/build_research.py _site/logistics-research.html
+
+          # Deployment guards: page must be real static HTML, not a runtime loader.
           test -s _site/logistics-research.html
+          grep -q 'Executive Summary' _site/logistics-research.html
+          grep -q 'Last Mile' _site/logistics-research.html
+          grep -q 'research-section' _site/logistics-research.html
           ! grep -q 'DecompressionStream' _site/logistics-research.html
           ! grep -q 'research/data-01.js' _site/logistics-research.html
+          ! grep -q '<audio' _site/logistics-research.html
 
       - name: Configure Pages
         uses: actions/configure-pages@v5
