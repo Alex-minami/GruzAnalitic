@@ -25,85 +25,31 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Build static research site
+      - name: Prepare static research site
         run: |
-          python -m pip install --quiet markdown beautifulsoup4
+          set -euo pipefail
           rm -rf _site
           mkdir _site
           rsync -a --exclude '.git' --exclude '_site' ./ _site/
 
-          python - <<'PY'
-          from pathlib import Path
-          import base64, binascii, re, struct, zlib
+          # Publish the already-built presentation HTML. No Markdown rendering,
+          # no runtime fetch, no gzip/base64 in the visitor's browser.
+          base64 --decode research/final-site.b64 > /tmp/logistics-research.html.gz
+          gzip -t /tmp/logistics-research.html.gz
+          gzip -dc /tmp/logistics-research.html.gz > _site/logistics-research.html
 
-          root = Path('_site/research')
-          parts = []
-          for p in sorted(root.glob('data-[0-9][0-9].js')):
-              m = re.search(r"push\('([^']+)'\)", p.read_text(encoding='utf-8'))
-              if m:
-                  parts.append(m.group(1))
-          if not parts:
-              raise SystemExit('Research data parts not found')
-
-          raw = base64.b64decode(''.join(parts))
-          if raw[:2] != b'\x1f\x8b':
-              raise SystemExit('Research payload is not gzip')
-
-          flg = raw[3]
-          pos = 10
-          if flg & 0x04:
-              xlen = int.from_bytes(raw[pos:pos+2], 'little')
-              pos += 2 + xlen
-          if flg & 0x08:
-              pos = raw.index(b'\x00', pos) + 1
-          if flg & 0x10:
-              pos = raw.index(b'\x00', pos) + 1
-          if flg & 0x02:
-              pos += 2
-
-          data = zlib.decompress(raw[pos:-8], -zlib.MAX_WBITS)
-          print(f'Recovered DEFLATE body: {len(data)} bytes')
-
-          try:
-              text = data.decode('utf-8')
-          except UnicodeDecodeError as exc:
-              diagnostic = data.decode('utf-8', errors='replace')
-              count = diagnostic.count('\ufffd')
-              char_pos = diagnostic.find('\ufffd')
-              context = diagnostic[max(0, char_pos-250):char_pos+250]
-              print(f'UTF-8 DAMAGE: byte_start={exc.start}, byte_end={exc.end}, replacements={count}')
-              print('UTF-8 DAMAGE CONTEXT BEGIN')
-              print(context)
-              print('UTF-8 DAMAGE CONTEXT END')
-              raise SystemExit('Recovered research contains damaged UTF-8; refusing to publish until repaired')
-
-          crc = binascii.crc32(data) & 0xffffffff
-          isize = len(data) & 0xffffffff
-          fixed = raw[:-8] + struct.pack('<II', crc, isize)
-          check = zlib.decompress(fixed, 16 + zlib.MAX_WBITS)
-          if check != data:
-              raise SystemExit('Repaired research stream verification failed')
-
-          encoded = base64.b64encode(fixed).decode('ascii')
-          for p in root.glob('data-[0-9][0-9].js'):
-              p.unlink()
-          (root / 'data-01.js').write_text(
-              "window.RESEARCH_DATA_PARTS=window.RESEARCH_DATA_PARTS||[];"
-              "window.RESEARCH_DATA_PARTS.push('" + encoded + "');\n",
-              encoding='utf-8'
-          )
-          print(f'Repaired research payload: {len(data)} bytes, CRC={crc:08x}')
-          PY
-
-          python _site/scripts/build_research.py _site/logistics-research.html
-
-          test -s _site/logistics-research.html
+          # Deployment guards.
+          test $(wc -c < _site/logistics-research.html) -gt 300000
           grep -q 'Executive Summary' _site/logistics-research.html
           grep -q 'Last Mile' _site/logistics-research.html
           grep -q 'research-section' _site/logistics-research.html
-          ! grep -q 'DecompressionStream' _site/logistics-research.html
-          ! grep -q 'research/data-01.js' _site/logistics-research.html
+          grep -q '@media(max-width:900px)' _site/logistics-research.html
+          grep -q 'Оглавление исследования' _site/logistics-research.html
           ! grep -q '<audio' _site/logistics-research.html
+          ! grep -q 'DecompressionStream' _site/logistics-research.html
+          ! grep -q 'fetch(' _site/logistics-research.html
+
+          echo "Static research ready: $(wc -c < _site/logistics-research.html) bytes"
 
       - name: Configure Pages
         uses: actions/configure-pages@v5
