@@ -32,11 +32,17 @@ jobs:
           mkdir _site
           rsync -a --exclude '.git' --exclude '_site' ./ _site/
 
-          # Replace legacy/corrupted browser data chunks with the canonical
-          # research source before running the build-time renderer.
+          # Rebuild the browser data file from the five canonical source chunks only.
+          # Diagnostic split files are intentionally excluded.
           rm -f _site/research/data-[0-9][0-9].js
           printf "window.RESEARCH_DATA_PARTS=window.RESEARCH_DATA_PARTS||[];window.RESEARCH_DATA_PARTS.push('" > _site/research/data-01.js
-          cat research/source-b64-*.txt >> _site/research/data-01.js
+          cat \
+            research/source-b64-01.txt \
+            research/source-b64-02.txt \
+            research/source-b64-03.txt \
+            research/source-b64-04.txt \
+            research/source-b64-05.txt \
+            >> _site/research/data-01.js
           printf "');\n" >> _site/research/data-01.js
 
           # Run inside _site so the generator reads only the canonical copy.
