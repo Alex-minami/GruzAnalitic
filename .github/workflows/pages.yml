@@ -32,26 +32,11 @@ jobs:
           mkdir _site
           rsync -a --exclude '.git' --exclude '_site' ./ _site/
 
-          # Build one canonical data stream. The original 04 chunk was corrupted;
-          # 04a + canonical-04-2 + 04c + 04d reconstruct it byte-for-byte.
-          rm -f _site/research/data-[0-9][0-9].js
-          printf "window.RESEARCH_DATA_PARTS=window.RESEARCH_DATA_PARTS||[];window.RESEARCH_DATA_PARTS.push('" > _site/research/data-01.js
-          cat \
-            research/source-b64-01.txt \
-            research/source-b64-02.txt \
-            research/source-b64-03.txt \
-            research/source-b64-04a.txt \
-            research/canonical-04-2.txt \
-            research/source-b64-04c.txt \
-            research/source-b64-04d.txt \
-            research/source-b64-05.txt \
-            >> _site/research/data-01.js
-          printf "');\n" >> _site/research/data-01.js
-
-          # Render the entire research into a finished static HTML page at build time.
+          # Render the research directly from the original repository data chunks.
+          # No fetch, no browser-side decompression, no reconstructed source-b64 files.
           python _site/scripts/build_research.py _site/logistics-research.html
 
-          # Deployment guards: no runtime research loading and no audio.
+          # Deployment guards: page must contain the research as finished static HTML.
           test -s _site/logistics-research.html
           grep -q 'Executive Summary' _site/logistics-research.html
           grep -q 'Last Mile' _site/logistics-research.html
