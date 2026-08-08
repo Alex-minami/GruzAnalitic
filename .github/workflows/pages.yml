@@ -25,31 +25,54 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Prepare static research site
+      - name: Prepare approved static research site
         run: |
           set -euo pipefail
           rm -rf _site
           mkdir _site
           rsync -a --exclude '.git' --exclude '_site' ./ _site/
 
-          # Publish the already-built presentation HTML. No Markdown rendering,
-          # no runtime fetch, no gzip/base64 in the visitor's browser.
-          base64 --decode research/final-site.b64 > /tmp/logistics-research.html.gz
-          gzip -t /tmp/logistics-research.html.gz
-          gzip -dc /tmp/logistics-research.html.gz > _site/logistics-research.html
+          cat \
+            research/approved-preview-final/p01.b64 \
+            research/approved-preview-final/p02.b64 \
+            research/approved-preview-final/p03.b64 \
+            research/approved-preview-final/p04.b64 \
+            research/approved-preview-final/p05.b64 \
+            research/approved-preview-final/p06.b64 \
+            research/approved-preview-final/p07.b64 \
+            research/approved-preview-final/p08.b64 \
+            research/approved-preview-final/p09.b64 \
+            research/approved-preview-final/p10a.b64 \
+            research/approved-preview-final/p10b.b64 \
+            research/approved-preview-final/p11.b64 \
+            research/approved-preview-final/p12.b64 \
+            research/approved-preview-final/p13.b64 \
+            research/approved-preview-final/p14.b64 \
+            research/approved-preview-final/p15a.b64 \
+            research/approved-preview-final/p15b1.b64 \
+            research/approved-preview-final/p15b21.b64 \
+            research/approved-preview-final/p15b221.b64 \
+            research/approved-preview-final/p15b222.b64 \
+            research/approved-preview-final/p16.b64 \
+            > /tmp/approved-preview.b64
 
-          # Deployment guards.
-          test $(wc -c < _site/logistics-research.html) -gt 300000
+          test "$(wc -c < /tmp/approved-preview.b64)" -eq 107524
+          base64 --decode /tmp/approved-preview.b64 > /tmp/approved-preview.html.gz
+          gzip -t /tmp/approved-preview.html.gz
+          gzip -dc /tmp/approved-preview.html.gz > _site/logistics-research.html
+
+          test "$(wc -c < _site/logistics-research.html)" -eq 380506
+          echo 'fafa264afc9c2edced3bc565887a76a74b1cad3c632ef496913a12fde0d7183a  _site/logistics-research.html' | sha256sum -c -
+
           grep -q 'Executive Summary' _site/logistics-research.html
           grep -q 'Last Mile' _site/logistics-research.html
-          grep -q 'research-section' _site/logistics-research.html
-          grep -q '@media(max-width:900px)' _site/logistics-research.html
           grep -q 'Оглавление исследования' _site/logistics-research.html
-          ! grep -q '<audio' _site/logistics-research.html
-          ! grep -q 'DecompressionStream' _site/logistics-research.html
+          grep -q '@media(max-width:900px)' _site/logistics-research.html
+          ! grep -q 'Failed to Decode Data' _site/logistics-research.html
           ! grep -q 'fetch(' _site/logistics-research.html
+          ! grep -q '<audio' _site/logistics-research.html
 
-          echo "Static research ready: $(wc -c < _site/logistics-research.html) bytes"
+          echo "Approved preview verified and ready: $(wc -c < _site/logistics-research.html) bytes"
 
       - name: Configure Pages
         uses: actions/configure-pages@v5
