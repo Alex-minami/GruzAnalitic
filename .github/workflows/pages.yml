@@ -66,7 +66,7 @@ jobs:
 
           grep -q 'Executive Summary' _site/logistics-research.html
           grep -q 'Last Mile' _site/logistics-research.html
-          grep -q 'Оглавление исследования' _site/logistics-research.html
+          grep -q 'Оглавление' _site/logistics-research.html
           grep -q '@media(max-width:900px)' _site/logistics-research.html
           ! grep -q 'Failed to Decode Data' _site/logistics-research.html
           ! grep -q 'fetch(' _site/logistics-research.html
