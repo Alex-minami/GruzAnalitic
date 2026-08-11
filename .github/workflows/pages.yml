@@ -61,18 +61,34 @@ jobs:
           gzip -t /tmp/approved-preview.html.gz
           gzip -dc /tmp/approved-preview.html.gz > _site/logistics-research.html
 
+          # Verify the exact approved preview before branding changes.
           test "$(wc -c < _site/logistics-research.html)" -eq 380506
           echo 'fafa264afc9c2edced3bc565887a76a74b1cad3c632ef496913a12fde0d7183a  _site/logistics-research.html' | sha256sum -c -
 
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path('_site/logistics-research.html')
+          s = p.read_text(encoding='utf-8')
+          old = '<a class="brand" href="#top"><span class="brand-mark">LI</span><span class="brand-copy"><b>Logistics Intelligence</b><small>Russia · 2022–2026</small></span></a>'
+          new = '<a class="brand transsky-brand" href="#top" aria-label="ТранСкай"><img class="transsky-logo" src="assets/transsky-logo.webp" alt="ТранСкай — логистика и транспорт"></a>'
+          if old not in s:
+              raise SystemExit('Header brand markup not found')
+          s = s.replace(old, new, 1)
+          css = '''\n.transsky-brand{display:flex;align-items:center;min-width:0}.transsky-logo{display:block;width:230px;height:auto;max-width:100%}@media(max-width:560px){.transsky-logo{width:160px}.header-actions{flex-shrink:0}}@media(max-width:380px){.transsky-logo{width:126px}.header-button{padding:8px 10px;font-size:13px}.header-inner{gap:8px}}\n'''
+          s = s.replace('</style>', css + '</style>', 1)
+          p.write_text(s, encoding='utf-8')
+          PY
+
+          test -s _site/assets/transsky-logo.webp
           grep -q 'Executive Summary' _site/logistics-research.html
           grep -q 'Last Mile' _site/logistics-research.html
           grep -q 'Оглавление' _site/logistics-research.html
-          grep -q '@media(max-width:900px)' _site/logistics-research.html
+          grep -q 'transsky-logo.webp' _site/logistics-research.html
           ! grep -q 'Failed to Decode Data' _site/logistics-research.html
           ! grep -q 'fetch(' _site/logistics-research.html
           ! grep -q '<audio' _site/logistics-research.html
 
-          echo "Approved preview verified and ready: $(wc -c < _site/logistics-research.html) bytes"
+          echo "TransSky branded research ready: $(wc -c < _site/logistics-research.html) bytes"
 
       - name: Configure Pages
         uses: actions/configure-pages@v5
