@@ -25,70 +25,24 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Prepare approved static research site
+      - name: Prepare static research site
         run: |
           set -euo pipefail
           rm -rf _site
           mkdir _site
           rsync -a --exclude '.git' --exclude '_site' ./ _site/
 
-          cat \
-            research/approved-preview-final/p01.b64 \
-            research/approved-preview-final/p02.b64 \
-            research/approved-preview-final/p03.b64 \
-            research/approved-preview-final/p04.b64 \
-            research/approved-preview-final/p05.b64 \
-            research/approved-preview-final/p06.b64 \
-            research/approved-preview-final/p07.b64 \
-            research/approved-preview-final/p08.b64 \
-            research/approved-preview-final/p09.b64 \
-            research/approved-preview-final/p10a.b64 \
-            research/approved-preview-final/p10b.b64 \
-            research/approved-preview-final/p11.b64 \
-            research/approved-preview-final/p12.b64 \
-            research/approved-preview-final/p13.b64 \
-            research/approved-preview-final/p14.b64 \
-            research/approved-preview-final/p15a.b64 \
-            research/approved-preview-final/p15b1.b64 \
-            research/approved-preview-final/p15b21.b64 \
-            research/approved-preview-final/p15b221.b64 \
-            research/approved-preview-final/p15b222.b64 \
-            research/approved-preview-final/p16.b64 \
-            > /tmp/approved-preview.b64
+          test -s _site/logistics-research.html
+          test -s _site/logistics-economics-calculator.html
+          grep -q 'Исследование логистического рынка России' _site/logistics-research.html
+          grep -q 'Калькулятор экономики' _site/logistics-research.html
+          grep -q 'Калькулятор экономики транспортного контракта' _site/logistics-economics-calculator.html
+          grep -q 'data:image/webp;base64' _site/logistics-research.html
+          grep -q 'data:image/webp;base64' _site/logistics-economics-calculator.html
+          ! grep -q 'logistics-research-v2-tek.html' _site/logistics-economics-calculator.html
 
-          test "$(wc -c < /tmp/approved-preview.b64)" -eq 107524
-          base64 --decode /tmp/approved-preview.b64 > /tmp/approved-preview.html.gz
-          gzip -t /tmp/approved-preview.html.gz
-          gzip -dc /tmp/approved-preview.html.gz > _site/logistics-research.html
-
-          # Verify the exact approved preview before branding changes.
-          test "$(wc -c < _site/logistics-research.html)" -eq 380506
-          echo 'fafa264afc9c2edced3bc565887a76a74b1cad3c632ef496913a12fde0d7183a  _site/logistics-research.html' | sha256sum -c -
-
-          python3 - <<'PY'
-          from pathlib import Path
-          p = Path('_site/logistics-research.html')
-          s = p.read_text(encoding='utf-8')
-          old = '<a class="brand" href="#top"><span class="brand-mark">LI</span><span class="brand-copy"><b>Logistics Intelligence</b><small>Russia · 2022–2026</small></span></a>'
-          new = '<a class="brand transsky-brand" href="#top" aria-label="ТранСкай"><img class="transsky-logo" src="assets/transsky-logo.webp" alt="ТранСкай — логистика и транспорт"></a>'
-          if old not in s:
-              raise SystemExit('Header brand markup not found')
-          s = s.replace(old, new, 1)
-          css = '''\n.transsky-brand{display:flex;align-items:center;min-width:0}.transsky-logo{display:block;width:230px;height:auto;max-width:100%}@media(max-width:560px){.transsky-logo{width:160px}.header-actions{flex-shrink:0}}@media(max-width:380px){.transsky-logo{width:126px}.header-button{padding:8px 10px;font-size:13px}.header-inner{gap:8px}}\n'''
-          s = s.replace('</style>', css + '</style>', 1)
-          p.write_text(s, encoding='utf-8')
-          PY
-
-          test -s _site/assets/transsky-logo.webp
-          grep -q 'Executive Summary' _site/logistics-research.html
-          grep -q 'Last Mile' _site/logistics-research.html
-          grep -q 'Оглавление' _site/logistics-research.html
-          grep -q 'transsky-logo.webp' _site/logistics-research.html
-          ! grep -q 'Failed to Decode Data' _site/logistics-research.html
-          ! grep -q 'fetch(' _site/logistics-research.html
-          ! grep -q '<audio' _site/logistics-research.html
-
-          echo "TransSky branded research ready: $(wc -c < _site/logistics-research.html) bytes"
+          echo "Research ready: $(wc -c < _site/logistics-research.html) bytes"
+          echo "Calculator ready: $(wc -c < _site/logistics-economics-calculator.html) bytes"
 
       - name: Configure Pages
         uses: actions/configure-pages@v5
