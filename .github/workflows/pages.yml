@@ -32,14 +32,25 @@ jobs:
           mkdir _site
           rsync -a --exclude '.git' --exclude '_site' ./ _site/
 
-          test -s _site/logistics-research.html
-          test -s _site/logistics-economics-calculator.html
-          grep -q 'Исследование логистического рынка России' _site/logistics-research.html
-          grep -q 'Калькулятор экономики' _site/logistics-research.html
-          grep -q 'Калькулятор экономики транспортного контракта' _site/logistics-economics-calculator.html
-          grep -q 'data:image/webp;base64' _site/logistics-research.html
-          grep -q 'data:image/webp;base64' _site/logistics-economics-calculator.html
-          ! grep -q 'logistics-research-v2-tek.html' _site/logistics-economics-calculator.html
+          node <<'NODE'
+          const fs = require('fs');
+          const research = fs.readFileSync('_site/logistics-research.html', 'utf8');
+          const calculator = fs.readFileSync('_site/logistics-economics-calculator.html', 'utf8');
+
+          const checks = [
+            [research.includes('Исследование логистического рынка РФ'), 'research title'],
+            [research.includes('Калькулятор экономики'), 'calculator link'],
+            [calculator.includes('Калькулятор экономики транспортного контракта'), 'calculator title'],
+            [research.includes('data:image/webp;base64'), 'research logo'],
+            [calculator.includes('data:image/webp;base64'), 'calculator logo'],
+            [!calculator.includes('logistics-research-v2-tek.html'), 'published research link'],
+          ];
+
+          for (const [passed, name] of checks) {
+            if (!passed) throw new Error(`Validation failed: ${name}`);
+            console.log(`Validated: ${name}`);
+          }
+          NODE
 
           echo "Research ready: $(wc -c < _site/logistics-research.html) bytes"
           echo "Calculator ready: $(wc -c < _site/logistics-economics-calculator.html) bytes"
