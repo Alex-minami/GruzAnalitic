@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Калькулятор экономики транспортного контракта: собственный парк, привлечённый перевозчик и гибридная схема.">
+  <title>Калькулятор экономики транспортного контракта — ТранСкай</title>
+  <style>
+    :root{--bg:#eef2f8;--surface:#fff;--ink:#111b2e;--muted:#67758e;--line:#dce4f0;--navy:#0b1528;--navy2:#111f37;--blue:#4f7cff;--blue2:#7aa0ff;--teal:#0ea5a0;--amber:#e59b2a;--red:#e95757;--shadow:0 18px 55px rgba(20,38,70,.08)}
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;line-height:1.5;-webkit-font-smoothing:antialiased}
+    button,input{font:inherit}
+    .site-header{height:76px;background:rgba(255,255,255,.95);backdrop-filter:blur(18px);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:100}
+    .header-inner{max-width:1240px;height:100%;margin:auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+    .brand{display:flex;align-items:center;color:var(--ink);text-decoration:none;min-width:0}
+    .transsky-logo{display:block;width:210px;max-width:100%;height:auto}
+    .top-nav{display:flex;align-items:center;gap:7px}.top-nav a{color:#53627a;text-decoration:none;padding:9px 13px;border-radius:11px;font-size:13px;font-weight:750;white-space:nowrap}.top-nav a:hover{background:#f0f4fb}.top-nav .active{background:#edf3ff;color:#2f5fd7;border:1px solid #cad8f1}
+    .hero{background:var(--navy);color:#fff;position:relative;overflow:hidden}.hero:after{content:"";position:absolute;width:520px;height:520px;border:80px solid rgba(95,132,213,.09);border-radius:50%;right:-160px;top:-250px}
+    .hero-inner{max-width:1180px;margin:auto;padding:54px 24px 48px;position:relative;z-index:1}.eyebrow{font-size:10px;letter-spacing:.17em;text-transform:uppercase;color:#8fb1ff;font-weight:900}.hero h1{font-size:48px;line-height:1.02;letter-spacing:-.04em;margin:13px 0 17px;max-width:850px}.hero h1 span{color:#82a8ff}.hero p{font-size:17px;line-height:1.55;color:#c8d3e6;max-width:820px;margin:0}.hero-notes{display:flex;gap:8px;flex-wrap:wrap;margin-top:24px}.hero-notes span{border:1px solid rgba(205,219,244,.2);border-radius:999px;padding:7px 11px;color:#d7e2f3;font-size:11px}
+    .workspace{max-width:1240px;margin:0 auto;padding:26px 24px 80px;display:grid;grid-template-columns:minmax(0,1.5fr) minmax(330px,.72fr);gap:22px;align-items:start}
+    .form-column{min-width:0}.panel{background:var(--surface);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);margin-bottom:18px;overflow:hidden}.panel-head{padding:21px 22px 16px;border-bottom:1px solid #e8edf5}.panel-head-row{display:flex;justify-content:space-between;gap:16px;align-items:flex-start}.panel-index{display:inline-grid;place-items:center;width:28px;height:28px;border-radius:8px;background:#edf3ff;color:#3769dc;font-size:10px;font-weight:900;flex:0 0 auto}.panel-title{display:flex;gap:11px;align-items:flex-start}.panel-title h2{font-size:19px;line-height:1.25;margin:1px 0 4px}.panel-title p{font-size:12px;color:var(--muted);margin:0}.panel-body{padding:19px 22px 22px}
+    .presets{display:flex;flex-wrap:wrap;gap:7px}.preset{border:1px solid #d5dfed;background:#fff;color:#4d5d76;border-radius:10px;padding:8px 11px;font-size:11px;font-weight:800;cursor:pointer}.preset:hover,.preset.active{background:#edf3ff;border-color:#adc1ed;color:#2f5fd7}
+    .fields{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.field{border:1px solid #dfe6f0;background:#fbfcfe;border-radius:13px;padding:12px;min-width:0;display:flex;flex-direction:column}.field.wide{grid-column:span 2}.field.full{grid-column:1/-1}.field-label{font-size:11px;font-weight:850;color:#40506a;line-height:1.35;min-height:30px;display:block}.field-help{font-size:9.5px;color:#8190a7;line-height:1.35;min-height:27px;margin:4px 0 8px;display:block}.input-line{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:stretch;border:1px solid #ccd7e5;background:#fff;border-radius:9px;overflow:hidden;margin-top:auto;min-width:0}.input-line:focus-within{border-color:#7699ec;box-shadow:0 0 0 3px rgba(79,124,255,.12)}.input-line input{width:100%;min-width:0;border:0;outline:0;padding:10px 9px;color:#15213a;background:transparent;font-weight:750;font-variant-numeric:tabular-nums}.unit{display:flex;align-items:center;padding:0 9px;border-left:1px solid #e1e7f0;background:#f5f7fb;color:#6d7a8e;font-size:10px;font-weight:800;white-space:nowrap}.range-wrap{margin-top:auto}.range-row{display:grid;grid-template-columns:minmax(0,1fr) 50px;align-items:center;gap:10px}.range-row input{width:100%;accent-color:var(--blue)}.range-out{font-size:13px;font-weight:900;color:#2f5fd7;text-align:right;white-space:nowrap}
+    .results-column{position:sticky;top:96px}.results{background:var(--navy);color:#fff;border-radius:22px;box-shadow:0 25px 70px rgba(13,25,44,.18);overflow:hidden}.results-head{padding:22px 22px 17px;border-bottom:1px solid rgba(255,255,255,.1)}.results-head .eyebrow{font-size:9px}.results-head h2{font-size:23px;line-height:1.15;margin:6px 0 5px}.results-head p{font-size:11px;color:#93a2bb;margin:0}.results-body{padding:16px}.result-tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:12px}.result-tab{border:1px solid rgba(255,255,255,.11);background:rgba(255,255,255,.035);color:#b7c4d8;border-radius:10px;padding:9px 6px;font-size:10px;font-weight:850;cursor:pointer}.result-tab.active{background:#244273;color:#fff;border-color:#527fc9}.scenario{display:none}.scenario.active{display:block}.kpi-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.kpi{border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.035);border-radius:12px;padding:12px;min-width:0}.kpi.wide{grid-column:1/-1}.kpi span,.kpi small{display:block;color:#92a2bc;font-size:9.5px;line-height:1.35}.kpi strong{display:block;font-size:20px;line-height:1.2;margin:5px 0 3px;white-space:nowrap;font-variant-numeric:tabular-nums}.positive{color:#59d3b6!important}.negative{color:#ff8f8f!important}.neutral{color:#ffd079!important}
+    .verdict{margin-top:10px;border:1px solid rgba(122,160,255,.28);background:#152844;border-radius:13px;padding:13px;font-size:11px;line-height:1.5;color:#cfd9e9}.verdict b{color:#fff}.verdict.good{background:#0b332f;border-color:#197e70}.verdict.warn{background:#3c2910;border-color:#9a6b1e}
+    .breakdown{margin-top:12px;border-top:1px solid rgba(255,255,255,.09);padding-top:13px}.breakdown h3{font-size:11px;margin:0 0 10px}.bar-row{display:grid;grid-template-columns:90px minmax(0,1fr) 66px;gap:8px;align-items:center;margin:8px 0;font-size:9.5px;color:#9eacc0}.bar{height:7px;background:rgba(255,255,255,.08);border-radius:999px;overflow:hidden}.bar i{display:block;height:100%;border-radius:999px;background:#557ce2}.bar-row strong{text-align:right;color:#dce6f5;white-space:nowrap;font-size:9.5px}
+    .sensitivity{background:#fff;border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);padding:22px;margin-top:18px;grid-column:1/-1}.sensitivity-head{display:flex;justify-content:space-between;gap:16px;align-items:end;margin-bottom:13px}.sensitivity h2{font-size:19px;margin:0 0 3px}.sensitivity p{font-size:11px;color:var(--muted);margin:0}.table-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:12px}.sensitivity table{width:100%;border-collapse:collapse;min-width:650px;font-size:11px}.sensitivity th{background:#f3f6fb;color:#53627a;text-align:left;font-size:9px;text-transform:uppercase;letter-spacing:.04em}.sensitivity th,.sensitivity td{padding:10px 11px;border-bottom:1px solid #e8edf4;white-space:nowrap}.sensitivity tr:last-child td{border-bottom:0}.note{grid-column:1/-1;background:#f7f9fc;border:1px solid var(--line);border-radius:15px;padding:14px 16px;color:#67758e;font-size:10.5px;line-height:1.55}.note b{color:#35445d}.footer{text-align:center;color:#7b899e;font-size:10px;padding:0 24px 45px}
+    .reset{border:1px solid #d5dfed;background:#fff;border-radius:10px;padding:8px 11px;color:#56657c;font-size:10px;font-weight:800;cursor:pointer;white-space:nowrap}
+    @media(max-width:1050px){.transsky-logo{width:165px}.workspace{grid-template-columns:1fr}.results-column{position:static}.fields{grid-template-columns:repeat(2,minmax(0,1fr))}.field.full{grid-column:1/-1}.sensitivity{grid-column:1}}
+    @media(max-width:680px){.site-header{height:66px}.header-inner{padding:0 14px}.transsky-logo{width:132px}.top-nav a{padding:8px 9px;font-size:11px}.top-nav a:first-child{display:none}.hero-inner{padding:42px 18px 38px}.hero h1{font-size:35px}.hero p{font-size:15px}.workspace{padding:14px 9px 55px;gap:14px}.panel{border-radius:16px;margin-bottom:12px}.panel-head{padding:17px 15px 13px}.panel-head-row{display:block}.presets{margin-top:13px}.panel-body{padding:14px}.fields{grid-template-columns:1fr}.field.wide,.field.full{grid-column:1}.field-label,.field-help{min-height:0}.field-help{margin-bottom:8px}.results{border-radius:17px}.results-head{padding:18px 16px 14px}.results-body{padding:12px}.kpi strong{font-size:18px}.sensitivity{padding:16px;border-radius:16px;margin-top:0}.sensitivity-head{display:block}.sensitivity .reset{margin-top:10px}.note{grid-column:1}.footer{padding-bottom:32px}}
+    @media(max-width:390px){.transsky-logo{width:122px}.top-nav a{font-size:10px;padding:8px}.hero h1{font-size:31px}.kpi-grid{grid-template-columns:1fr}.kpi.wide{grid-column:1}.result-tabs{gap:4px}.result-tab{font-size:9px}.bar-row{grid-template-columns:78px minmax(0,1fr) 60px}}
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="logistics-research.html">
+        <img class="transsky-logo" src="data:image/webp;base64,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" alt="ТранСкай — логистика и транспорт">
+      </a>
+      <nav class="top-nav" aria-label="Основная навигация">
+        <a href="logistics-research.html">Исследование</a>
+        <a class="active" href="#top">Калькулятор экономики</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="hero-inner">
+        <div class="eyebrow">САМОСТОЯТЕЛЬНЫЙ ИНСТРУМЕНТ ДЛЯ ТРАНСПОРТНО-ЭКСПЕДИТОРСКОЙ КОМПАНИИ</div>
+        <h1>Калькулятор экономики <span>транспортного контракта</span></h1>
+        <p>Настройте клиентскую ставку, загрузку и полный контур затрат. Инструмент сравнит собственный парк, привлечённого перевозчика и гибридную схему на одном объёме.</p>
+        <div class="hero-notes"><span>Все суммы без НДС</span><span>Месячный горизонт</span><span>Сценарная модель, не бухгалтерский отчёт о доходах и расходах</span></div>
+      </div>
+    </section>
+
+    <div class="workspace">
+      <div class="form-column">
+        <section class="panel">
+          <div class="panel-head">
+            <div class="panel-head-row">
+              <div class="panel-title"><span class="panel-index">01</span><div><h2>Контракт и объём</h2><p>Единый периметр для сравнения трёх способов исполнения.</p></div></div>
+              <div class="presets" aria-label="Пресеты класса автомобиля">
+                <button class="preset active" type="button" data-preset="lcv">лёгкий коммерческий транспорт / «Газель»</button>
+                <button class="preset" type="button" data-preset="mcv">3–5 тонн</button>
+                <button class="preset" type="button" data-preset="hcv">5–10 тонн</button>
+              </div>
+            </div>
+          </div>
+          <div class="panel-body"><div class="fields">
+            <label class="field"><span class="field-label">Клиентская ставка</span><span class="field-help">Выручка за оплачиваемый километр</span><span class="input-line"><input id="clientRate" type="number" min="0" step="1" value="90"><span class="unit">₽/опл. км</span></span></label>
+            <label class="field"><span class="field-label">Фактический пробег контракта</span><span class="field-help">Весь пробег, включая порожний</span><span class="input-line"><input id="totalKm" type="number" min="100" step="100" value="10000"><span class="unit">км/мес</span></span></label>
+            <label class="field"><span class="field-label">Порожний пробег</span><span class="field-help">Доля неоплачиваемого пробега</span><span class="input-line"><input id="emptyPct" type="number" min="0" max="80" step="1" value="20"><span class="unit">%</span></span></label>
+            <label class="field"><span class="field-label">Рабочих дней</span><span class="field-help">Для контроля интенсивности эксплуатации</span><span class="input-line"><input id="workDays" type="number" min="1" max="31" step="1" value="22"><span class="unit">дней</span></span></label>
+            <label class="field"><span class="field-label">Производственная ёмкость одного авто</span><span class="field-help">Максимальный фактический пробег в месяц</span><span class="input-line"><input id="capacityKm" type="number" min="100" step="100" value="7500"><span class="unit">км/авто</span></span></label>
+            <label class="field"><span class="field-label">Целевая маржа</span><span class="field-help">Для расчёта минимальной клиентской ставки</span><span class="input-line"><input id="targetMargin" type="number" min="0" max="70" step="1" value="15"><span class="unit">%</span></span></label>
+            <label class="field full"><span class="field-label">Доля объёма собственным парком</span><span class="field-help">Остальной объём передаётся привлечённым перевозчикам</span><span class="range-wrap"><span class="range-row"><input id="ownShare" type="range" min="0" max="100" step="5" value="70"><output class="range-out" id="ownShareOut">70%</output></span></span></label>
+          </div></div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-head"><div class="panel-title"><span class="panel-index">02</span><div><h2>Собственный транспорт</h2><p>Переменные и постоянные расходы показаны раздельно.</p></div></div></div>
+          <div class="panel-body"><div class="fields">
+            <label class="field"><span class="field-label">Цена топлива</span><span class="field-help">Фактическая закупочная цена</span><span class="input-line"><input id="fuelPrice" type="number" min="0" step="0.01" value="91.29"><span class="unit">₽/л</span></span></label>
+            <label class="field"><span class="field-label">Расход топлива</span><span class="field-help">Средний расход с учётом маршрута</span><span class="input-line"><input id="fuelUse" type="number" min="0" step="0.1" value="14"><span class="unit">л/100 км</span></span></label>
+            <label class="field"><span class="field-label">расходы на оплату труда водителя</span><span class="field-help">Зарплата и начисления на одно авто</span><span class="input-line"><input id="driverCost" type="number" min="0" step="1000" value="175000"><span class="unit">₽/мес</span></span></label>
+            <label class="field"><span class="field-label">Лизинг или амортизация</span><span class="field-help">Платёж на одно авто</span><span class="input-line"><input id="leaseCost" type="number" min="0" step="1000" value="75000"><span class="unit">₽/мес</span></span></label>
+            <label class="field"><span class="field-label">ТО и ремонт</span><span class="field-help">Резерв на фактический километр</span><span class="input-line"><input id="maintenance" type="number" min="0" step="0.1" value="3.5"><span class="unit">₽/факт. км</span></span></label>
+            <label class="field"><span class="field-label">Шины</span><span class="field-help">Износ и сезонное обслуживание</span><span class="input-line"><input id="tires" type="number" min="0" step="0.1" value="0.8"><span class="unit">₽/факт. км</span></span></label>
+            <label class="field"><span class="field-label">Платные дороги и парковки</span><span class="field-help">В среднем на фактический километр</span><span class="input-line"><input id="roadCosts" type="number" min="0" step="0.1" value="0"><span class="unit">₽/факт. км</span></span></label>
+            <label class="field"><span class="field-label">Страхование</span><span class="field-help">ОСАГО, каско и грузы на одно авто</span><span class="input-line"><input id="insurance" type="number" min="0" step="500" value="9000"><span class="unit">₽/мес</span></span></label>
+            <label class="field"><span class="field-label">Налоги и разрешения</span><span class="field-help">Транспортный налог, тахограф и прочее</span><span class="input-line"><input id="taxes" type="number" min="0" step="500" value="5000"><span class="unit">₽/мес</span></span></label>
+            <label class="field"><span class="field-label">Административные расходы</span><span class="field-help">Диспетчеризация и офис на одно авто</span><span class="input-line"><input id="ownAdmin" type="number" min="0" step="500" value="50000"><span class="unit">₽/мес</span></span></label>
+            <label class="field"><span class="field-label">Резерв простоев и риска</span><span class="field-help">Надбавка к собственным расходам</span><span class="input-line"><input id="ownReserve" type="number" min="0" max="50" step="1" value="5"><span class="unit">%</span></span></label>
+          </div></div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-head"><div class="panel-title"><span class="panel-index">03</span><div><h2>Привлечённый транспорт</h2><p>Закупочная ставка дополнена расходами, которые обычно не видны в валовом наценкае.</p></div></div></div>
+          <div class="panel-body"><div class="fields">
+            <label class="field"><span class="field-label">Закупочная ставка перевозчика</span><span class="field-help">Оплата за оплачиваемый километр</span><span class="input-line"><input id="carrierRate" type="number" min="0" step="1" value="78"><span class="unit">₽/опл. км</span></span></label>
+            <label class="field"><span class="field-label">Отсрочка клиента сверх выплаты перевозчику</span><span class="field-help">Разрыв, который финансирует транспортно-экспедиторская компания</span><span class="input-line"><input id="paymentGap" type="number" min="0" max="365" step="1" value="30"><span class="unit">дней</span></span></label>
+            <label class="field"><span class="field-label">Стоимость оборотного капитала</span><span class="field-help">Годовая ставка финансирования разрыва</span><span class="input-line"><input id="capitalRate" type="number" min="0" max="100" step="1" value="24"><span class="unit">% годовых</span></span></label>
+            <label class="field"><span class="field-label">Резерв претензий и требования к уровню обслуживания</span><span class="field-help">Доля выручки привлечённого объёма</span><span class="input-line"><input id="claimsPct" type="number" min="0" max="30" step="0.5" value="2"><span class="unit">%</span></span></label>
+            <label class="field"><span class="field-label">Операционные расходы транспортно-экспедиторской компании</span><span class="field-help">ИТ, диспетчеризация и документооборот на полный объём</span><span class="input-line"><input id="hiredAdmin" type="number" min="0" step="500" value="35000"><span class="unit">₽/мес</span></span></label>
+          </div></div>
+        </section>
+      </div>
+
+      <aside class="results-column" aria-live="polite">
+        <section class="results">
+          <div class="results-head"><div class="eyebrow">РЕЗУЛЬТАТ МОДЕЛИ</div><h2>Экономика исполнения</h2><p id="summaryLine">Расчёт обновляется при изменении любого параметра.</p></div>
+          <div class="results-body">
+            <div class="result-tabs" role="tablist">
+              <button class="result-tab" type="button" data-tab="own">100% свой</button>
+              <button class="result-tab" type="button" data-tab="hired">100% привлечённый</button>
+              <button class="result-tab active" type="button" data-tab="hybrid">Гибрид</button>
+            </div>
+            <div class="scenario" id="scenario-own">
+              <div class="kpi-grid">
+                <div class="kpi"><span>Автомобилей требуется</span><strong id="ownVehicles">—</strong><small id="ownDailyKm">—</small></div>
+                <div class="kpi"><span>Оплачиваемый пробег</span><strong id="ownPaidKm">—</strong><small>после порожняка</small></div>
+                <div class="kpi"><span>Себестоимость</span><strong id="ownCostPaid">—</strong><small>за оплачиваемый км</small></div>
+                <div class="kpi"><span>Операционный результат</span><strong id="ownProfit">—</strong><small id="ownMargin">—</small></div>
+                <div class="kpi"><span>Безубыточный пробег</span><strong id="breakEvenKm">—</strong><small>при текущей ставке</small></div>
+                <div class="kpi"><span>Ставка для целевой маржи</span><strong id="ownTargetRate">—</strong><small id="targetMarginText">—</small></div>
+              </div>
+              <div class="breakdown"><h3>Структура затрат собственного исполнения</h3><div id="costBars"></div></div>
+            </div>
+            <div class="scenario" id="scenario-hired">
+              <div class="kpi-grid">
+                <div class="kpi"><span>Валовая экспедиторская наценка</span><strong id="grossSpread">—</strong><small>до расходов транспортно-экспедиторской компании</small></div>
+                <div class="kpi"><span>Валовая маржа</span><strong id="grossMargin">—</strong><small>к выручке</small></div>
+                <div class="kpi"><span>Финансирование</span><strong id="financeCost">—</strong><small>стоимость разрыва платежей</small></div>
+                <div class="kpi"><span>Резерв претензий</span><strong id="claimsCost">—</strong><small>сценарная оценка</small></div>
+                <div class="kpi wide"><span>Результат после прямых расходов транспортно-экспедиторской компании</span><strong id="hiredProfit">—</strong><small id="hiredMargin">—</small></div>
+              </div>
+            </div>
+            <div class="scenario active" id="scenario-hybrid">
+              <div class="kpi-grid">
+                <div class="kpi"><span>Своим парком</span><strong id="hybridOwnShare">—</strong><small id="hybridVehicles">—</small></div>
+                <div class="kpi"><span>Привлечённым</span><strong id="hybridHiredShare">—</strong><small>доля месячного объёма</small></div>
+                <div class="kpi"><span>Общая выручка</span><strong id="hybridRevenue">—</strong><small>без НДС</small></div>
+                <div class="kpi"><span>Полные прямые расходы</span><strong id="hybridCost">—</strong><small>оба способа исполнения</small></div>
+                <div class="kpi wide"><span>Результат гибридной схемы</span><strong id="hybridProfit">—</strong><small id="hybridMargin">—</small></div>
+              </div>
+              <div class="verdict" id="verdict">—</div>
+            </div>
+          </div>
+        </section>
+      </aside>
+
+      <section class="sensitivity">
+        <div class="sensitivity-head"><div><h2>Чувствительность к порожнему пробегу</h2><p>Минимальная клиентская ставка для выбранной целевой маржи при неизменных остальных параметрах.</p></div><button class="reset" id="reset" type="button">Вернуть базовый сценарий</button></div>
+        <div class="table-scroll"><table><thead><tr><th>Порожний пробег</th><th>Оплачиваемый пробег</th><th>Свой парк: ставка</th><th>Привлечённый: ставка</th><th>Разница своего к текущей ставке</th></tr></thead><tbody id="sensitivityBody"></tbody></table></div>
+      </section>
+
+      <div class="note"><b>Как читать результат.</b> «100% свой» и «100% привлечённый» сравнивают крайние сценарии на одном объёме. «Гибрид» распределяет объём по выбранной доле и автоматически считает количество собственных автомобилей через их месячную ёмкость. Модель не учитывает НДС и налог на прибыль; результат следует сверять с управленческим отчётом о доходах и расходах и условиями конкретного договора.</div>
+    </div>
+  </main>
+
+  <footer class="footer">ТранСкай · калькулятор экономики транспортного контракта · локальная версия · 11.08.2026</footer>
+
+  <script>
+    (()=>{
+      const $=id=>document.getElementById(id);
+      const ids=['clientRate','totalKm','emptyPct','workDays','capacityKm','targetMargin','ownShare','fuelPrice','fuelUse','driverCost','leaseCost','maintenance','tires','roadCosts','insurance','taxes','ownAdmin','ownReserve','carrierRate','paymentGap','capitalRate','claimsPct','hiredAdmin'];
+      const defaults={clientRate:90,totalKm:10000,emptyPct:20,workDays:22,capacityKm:7500,targetMargin:15,ownShare:70,fuelPrice:91.29,fuelUse:14,driverCost:175000,leaseCost:75000,maintenance:3.5,tires:.8,roadCosts:0,insurance:9000,taxes:5000,ownAdmin:50000,ownReserve:5,carrierRate:78,paymentGap:30,capitalRate:24,claimsPct:2,hiredAdmin:35000};
+      const presets={
+        lcv:{capacityKm:7500,fuelUse:14,driverCost:175000,leaseCost:75000,maintenance:3.5,tires:.8,insurance:9000,taxes:5000,ownAdmin:50000,carrierRate:78,clientRate:90},
+        mcv:{capacityKm:8000,fuelUse:20,driverCost:195000,leaseCost:110000,maintenance:5.2,tires:1.3,insurance:13000,taxes:8000,ownAdmin:55000,carrierRate:88,clientRate:110},
+        hcv:{capacityKm:9000,fuelUse:27,driverCost:220000,leaseCost:165000,maintenance:7.2,tires:2.1,insurance:18000,taxes:13000,ownAdmin:65000,carrierRate:112,clientRate:138}
+      };
+      const val=id=>Math.max(0,parseFloat($(id).value)||0);
+      const money=(n,d=0)=>new Intl.NumberFormat('ru-RU',{minimumFractionDigits:d,maximumFractionDigits:d}).format(Number.isFinite(n)?n:0)+' ₽';
+      const number=(n,d=0)=>new Intl.NumberFormat('ru-RU',{minimumFractionDigits:d,maximumFractionDigits:d}).format(Number.isFinite(n)?n:0);
+      const pct=n=>number(n,1)+'%';
+      const paint=(el,n)=>{el.classList.remove('positive','negative','neutral');el.classList.add(n>100?'positive':n<-100?'negative':'neutral')};
+
+      function ownModel(km,empty,client,capacity,c){
+        const paid=km*(1-empty),vehicles=km>0?Math.ceil(km/Math.max(1,capacity)):0;
+        const fuelKm=c.fuelPrice*c.fuelUse/100;
+        const variableKm=fuelKm+c.maintenance+c.tires+c.roadCosts;
+        const parts={fuel:fuelKm*km,driver:c.driverCost*vehicles,lease:c.leaseCost*vehicles,service:(c.maintenance+c.tires+c.roadCosts)*km,other:(c.insurance+c.taxes+c.ownAdmin)*vehicles};
+        const base=Object.values(parts).reduce((a,b)=>a+b,0),reserve=base*c.ownReserve;
+        const cost=base+reserve,revenue=client*paid,profit=revenue-cost;
+        return {km,paid,vehicles,fuelKm,variableKm,parts,reserve,cost,revenue,profit,margin:revenue?profit/revenue:0,costPaid:paid?cost/paid:0};
+      }
+      function hiredModel(km,empty,client,c,scale=1){
+        const paid=km*(1-empty),revenue=client*paid,carrier=c.carrierRate*paid;
+        const finance=carrier*c.paymentGap/365*c.capitalRate,claims=revenue*c.claimsPct,admin=c.hiredAdmin*scale;
+        const cost=carrier+finance+claims+admin,profit=revenue-cost;
+        return {km,paid,revenue,carrier,finance,claims,admin,cost,profit,margin:revenue?profit/revenue:0,gross:revenue-carrier,grossMargin:revenue?(revenue-carrier)/revenue:0};
+      }
+      function inputs(){return {fuelPrice:val('fuelPrice'),fuelUse:val('fuelUse'),driverCost:val('driverCost'),leaseCost:val('leaseCost'),maintenance:val('maintenance'),tires:val('tires'),roadCosts:val('roadCosts'),insurance:val('insurance'),taxes:val('taxes'),ownAdmin:val('ownAdmin'),ownReserve:val('ownReserve')/100,carrierRate:val('carrierRate'),paymentGap:val('paymentGap'),capitalRate:val('capitalRate')/100,claimsPct:val('claimsPct')/100,hiredAdmin:val('hiredAdmin')};}
+      function targetRate(cost,paid,margin){return paid>0&&margin<.99?cost/(paid*(1-margin)):0}
+
+      function calculate(){
+        const client=val('clientRate'),km=val('totalKm'),empty=Math.min(.95,val('emptyPct')/100),capacity=Math.max(1,val('capacityKm')),target=Math.min(.95,val('targetMargin')/100),share=Math.min(1,val('ownShare')/100),days=Math.max(1,val('workDays')),c=inputs();
+        const own=ownModel(km,empty,client,capacity,c),hired=hiredModel(km,empty,client,c,1);
+        const ownKm=km*share,hiredKm=km-ownKm,hyOwn=ownModel(ownKm,empty,client,capacity,c),hyHired=hiredModel(hiredKm,empty,client,c,1-share);
+        const hyRevenue=hyOwn.revenue+hyHired.revenue,hyCost=hyOwn.cost+hyHired.cost,hyProfit=hyRevenue-hyCost,hyMargin=hyRevenue?hyProfit/hyRevenue:0;
+        $('ownShareOut').textContent=Math.round(share*100)+'%';
+        $('summaryLine').textContent=number(km)+' факт. км · '+number(km*(1-empty))+' оплач. км · '+money(client)+' / оплач. км';
+
+        $('ownVehicles').textContent=number(own.vehicles)+' авто';
+        $('ownDailyKm').textContent=number(km/days/Math.max(1,own.vehicles))+' км/день на авто';
+        $('ownPaidKm').textContent=number(own.paid)+' км';
+        $('ownCostPaid').textContent=money(own.costPaid,1);
+        $('ownProfit').textContent=(own.profit>0?'+':'')+money(own.profit);paint($('ownProfit'),own.profit);
+        $('ownMargin').textContent='маржа '+pct(own.margin*100);
+        const fixedPerVehicle=(c.driverCost+c.leaseCost+c.insurance+c.taxes+c.ownAdmin)*(1+c.ownReserve),variableWithReserve=own.variableKm*(1+c.ownReserve),denom=client*(1-empty)-variableWithReserve;
+        const be=denom>0?fixedPerVehicle/denom:Infinity;
+        $('breakEvenKm').textContent=Number.isFinite(be)?number(be)+' км':'нет';
+        $('ownTargetRate').textContent=money(targetRate(own.cost,own.paid,target),1);
+        $('targetMarginText').textContent='для маржи '+pct(target*100);
+
+        $('grossSpread').textContent=(hired.gross>0?'+':'')+money(hired.gross);paint($('grossSpread'),hired.gross);
+        $('grossMargin').textContent=pct(hired.grossMargin*100);
+        $('financeCost').textContent=money(hired.finance);
+        $('claimsCost').textContent=money(hired.claims);
+        $('hiredProfit').textContent=(hired.profit>0?'+':'')+money(hired.profit);paint($('hiredProfit'),hired.profit);
+        $('hiredMargin').textContent='маржа после прямых расходов '+pct(hired.margin*100);
+
+        $('hybridOwnShare').textContent=Math.round(share*100)+'%';
+        $('hybridHiredShare').textContent=Math.round((1-share)*100)+'%';
+        $('hybridVehicles').textContent=hyOwn.vehicles+' авто · '+number(ownKm)+' факт. км';
+        $('hybridRevenue').textContent=money(hyRevenue);
+        $('hybridCost').textContent=money(hyCost);
+        $('hybridProfit').textContent=(hyProfit>0?'+':'')+money(hyProfit);paint($('hybridProfit'),hyProfit);
+        $('hybridMargin').textContent='операционная маржа '+pct(hyMargin*100);
+
+        const verdict=$('verdict'),best=Math.max(own.profit,hired.profit,hyProfit),deltaOwn=hyProfit-own.profit,deltaHired=hyProfit-hired.profit;
+        verdict.className='verdict '+(hyProfit>=0?'good':'warn');
+        if(best===hyProfit&&hyProfit>=0) verdict.innerHTML='<b>При выбранной доле гибрид даёт лучший результат.</b> Он выше сценария «100% свой» на '+money(Math.max(0,deltaOwn))+' и сценария «100% привлечённый» на '+money(Math.max(0,deltaHired))+'. Проверьте, не создаёт ли округление числа собственных автомобилей лишний простой.';
+        else if(best===own.profit) verdict.innerHTML='<b>На этих вводных сильнее 100% собственное исполнение.</b> Гибрид уступает ему '+money(own.profit-hyProfit)+'. Основные условия — подтверждённый объём и сохранение рассчитанного пробега на автомобиль.';
+        else verdict.innerHTML='<b>На этих вводных сильнее 100% привлечённое исполнение.</b> Гибрид уступает ему '+money(hired.profit-hyProfit)+'. Собственный парк требует большей загрузки, более высокой ставки или меньших постоянных затрат.';
+
+        const bars=[['Топливо',own.parts.fuel],['ФОТ',own.parts.driver],['Лизинг',own.parts.lease],['ТО, шины, дороги',own.parts.service],['Страх., налоги, офис',own.parts.other],['Резерв',own.reserve]];
+        $('costBars').innerHTML=bars.map(([label,value])=>'<div class="bar-row"><span>'+label+'</span><span class="bar"><i style="width:'+Math.max(1,value/Math.max(1,own.cost)*100)+'%"></i></span><strong>'+money(value)+'</strong></div>').join('');
+
+        const rows=[0,10,20,30,40].map(ep=>{const e=ep/100,paid=km*(1-e),om=ownModel(km,e,client,capacity,c),ownRate=targetRate(om.cost,paid,target),hiredBase=c.carrierRate*paid*(1+c.paymentGap/365*c.capitalRate)+c.hiredAdmin,hiredRate=paid>0&&target+c.claimsPct<.99?hiredBase/(paid*(1-target-c.claimsPct)):0,diff=ownRate-client;return '<tr><td>'+ep+'%</td><td>'+number(paid)+' км</td><td>'+money(ownRate,1)+'</td><td>'+money(hiredRate,1)+'</td><td style="color:'+(diff<=0?'#078865':'#c34e4e')+';font-weight:800">'+(diff>0?'+':'')+money(diff,1)+'</td></tr>'}).join('');
+        $('sensitivityBody').innerHTML=rows;
+      }
+
+      ids.forEach(id=>$(id).addEventListener('input',calculate));
+      document.querySelectorAll('.result-tab').forEach(btn=>btn.addEventListener('click',()=>{document.querySelectorAll('.result-tab').forEach(b=>b.classList.toggle('active',b===btn));document.querySelectorAll('.scenario').forEach(s=>s.classList.toggle('active',s.id==='scenario-'+btn.dataset.tab))}));
+      document.querySelectorAll('.preset').forEach(btn=>btn.addEventListener('click',()=>{const p=presets[btn.dataset.preset];Object.entries(p).forEach(([id,v])=>$(id).value=v);document.querySelectorAll('.preset').forEach(b=>b.classList.toggle('active',b===btn));calculate()}));
+      $('reset').addEventListener('click',()=>{Object.entries(defaults).forEach(([id,v])=>$(id).value=v);document.querySelectorAll('.preset').forEach(b=>b.classList.toggle('active',b.dataset.preset==='lcv'));calculate();scrollTo({top:document.querySelector('.workspace').offsetTop-70,behavior:'smooth'})});
+      calculate();
+    })();
+  </script>
+</body>
+</html>
